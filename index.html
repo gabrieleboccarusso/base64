@@ -16,30 +16,45 @@
 				padding-left: 20px;
 				overflow-wrap: break-word;
 			}
+
+			textarea {
+				margin-top: 5px;
+  				resize: none;
+			}
 		</style>
 	</head>
 
-	<body>
-		<h1> Base 64 hashing algorithm </h1>
-
+	<body onload="encodethis.value = '', decodethis.value = ''">
+		<h1> Base 64 server side hashing algorithm </h1>
+		
 		<section class="left">
-			<label> String to encode: </label>
-			<input type="text" name="left" id="encodethis">
 			<input type="button" value="convert" onclick="output(encodethis.value, encodethis.name);">
-
+			<input type="button" value="clean" onclick="encodethis.value=''">
 			<br>
-
+			<textarea type="text" 
+					name="left" 
+					id="encodethis" 
+					rows="4" 
+					cols="40" 
+					placeholder="string to encode...">
+			</textarea>
+			<br>
 			<output id = "output_encode" for="encodethis">
 			</output>
 		</section>
 
 		<section class="right">
-			<label> String to decode: </label>
-			<input type="text" name="right" id="decodethis">
 			<input type="button" value="convert" onclick="output(decodethis.value, decodethis.name);">
-
+			<input type="button" value="clean" onclick="decodethis.value=''">
 			<br>
-
+			<textarea type="text" 
+					name="right" 
+					id="decodethis" 
+					rows="4" 
+					cols="40" 
+					placeholder="string to decode...">
+			</textarea>
+			<br>
 			<output id = "output_decode" for="decodethis">
 			</output>
 		</section>
@@ -50,15 +65,13 @@
 		let chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 		let output_value;
 		let output_place;
-		let br = document.createElement('br');
-		let copy_to_clipoard = document.createElement("button");
-		copy_to_clipoard.innerHTML = "copy to clipboard"; 
 		
 		function output(input, where) {
 			switch(where) {
 				case 'left': // left is where we *encode* 
 					output_place = document.getElementById("output_encode");
 					output_value = encode64(input);
+					// input = '*'.repeat(input.length); // censor original input
 				break;
 				case 'right': // right is where we *decode*
 					output_place = document.getElementById("output_decode");
@@ -66,15 +79,20 @@
 				break;
 			}
 
-			copy_to_clipoard.onclick = function () {
+			// if the button is not created inside the function everytime
+			// it will be appended again the former will vanish
+			let copy_to_clipoard = document.createElement("button");
+			copy_to_clipoard.innerHTML = "copy to clipboard"; 
+			copy_to_clipoard.onclick = () => {
 				navigator.clipboard.writeText(output_value);
 			};
 
 			output_place.appendChild(document.createTextNode(input))
-			output_place.appendChild(br);
+			output_place.appendChild(document.createElement('br'));
 			output_place.appendChild(document.createTextNode(output_value));
-			output_place.appendChild(br);
+			output_place.appendChild(document.createElement('br'));
 			output_place.appendChild(copy_to_clipoard);
+			output_place.appendChild(document.createElement('br'));
 		}
 
 		function makeBinary(input) {
