@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 
 	<head>
@@ -23,8 +24,8 @@
 
 		<section class="left">
 			<label> String to encode: </label>
-			<input type="text" name="encodethis" id="encodethis">
-			<input type="button" value="convert" onclick="encode(encodethis.value);">
+			<input type="text" name="left" id="encodethis">
+			<input type="button" value="convert" onclick="output(encodethis.value, encodethis.name);">
 
 			<br>
 
@@ -34,8 +35,8 @@
 
 		<section class="right">
 			<label> String to decode: </label>
-			<input type="text" name="decodethis" id="decodethis">
-			<input type="button" value="convert" onclick="decode(decodethis.value);">
+			<input type="text" name="right" id="decodethis">
+			<input type="button" value="convert" onclick="output(decodethis.value, decodethis.name);">
 
 			<br>
 
@@ -47,17 +48,26 @@
 
 	<script>
 		let chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-		let output_en = document.getElementById("output_encode");
-		let output_de = document.getElementById("output_decode");
+		// let output_en = document.getElementById("output_encode");
+		// let output_de = document.getElementById("output_decode");
+		let output_value;
+		let output_place;
 		
-		function encode(input) {
-			output_en.appendChild(document.createTextNode(input + ' => ' + encode64(input)));
-			output_en.appendChild(document.createElement('br'));
-		}
+		// this two function can use less code
+		function output(input, where) {
+			switch(where) {
+				case 'left': // left is where we *encode* 
+					output_place = document.getElementById("output_encode");
+					output_value = encode64(input);
+				break;
+				case 'right': // right is where we *decode*
+					output_place = document.getElementById("output_decode");
+					output_value = decode64(input);
+				break;
+			}
 
-		function decode(input) {
-			output_de.appendChild(document.createTextNode(input + ' => ' + decode64(input)));
-			output_de.appendChild(document.createElement('br'));
+			output_place.appendChild(document.createTextNode(input + ' => ' + output_value));
+			output_place.appendChild(document.createElement('br'));
 		}
 
 		function showOutput(oldText, newText) {
