@@ -48,12 +48,12 @@
 
 	<script>
 		let chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-		// let output_en = document.getElementById("output_encode");
-		// let output_de = document.getElementById("output_decode");
 		let output_value;
 		let output_place;
+		let br = document.createElement('br');
+		let copy_to_clipoard = document.createElement("button");
+		copy_to_clipoard.innerHTML = "copy to clipboard"; 
 		
-		// this two function can use less code
 		function output(input, where) {
 			switch(where) {
 				case 'left': // left is where we *encode* 
@@ -66,15 +66,15 @@
 				break;
 			}
 
-			output_place.appendChild(document.createTextNode(input + ' => ' + output_value));
-			output_place.appendChild(document.createElement('br'));
-		}
+			copy_to_clipoard.onclick = function () {
+				navigator.clipboard.writeText(output_value);
+			};
 
-		function showOutput(oldText, newText) {
-			// innerHTML is not advised although being the fastest
-			let output = document.getElementById("out");
-			output.appendChild(document.createTextNode(oldText + ' => ' + newText + ' => ' + decode64(newText)));
-			output.appendChild(document.createElement('br'));
+			output_place.appendChild(document.createTextNode(input))
+			output_place.appendChild(br);
+			output_place.appendChild(document.createTextNode(output_value));
+			output_place.appendChild(br);
+			output_place.appendChild(copy_to_clipoard);
 		}
 
 		function makeBinary(input) {
